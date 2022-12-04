@@ -54,8 +54,8 @@ def minetest_to_minerl_obs(minetest_obs):
     return {"pov": minetest_obs}
 
 
-def main(model, weights, video_dir, max_steps, show):
-    env = Minetest()
+def main(model, weights, video_dir, minetest_dir, max_steps, show):
+    env = Minetest(autostart_minetest=True, minetest_dir=minetest_dir)
     env = TimeLimit(env, max_episode_steps=max_steps)
     env.metadata["render.modes"] = ["rgb_array", "ansi"]
     env.metadata["video.frames_per_second"] = 20
@@ -103,10 +103,16 @@ if __name__ == "__main__":
         help="Path to the video recordings.",
     )
     parser.add_argument(
+        "--minetest-dir",
+        type=str,
+        default="../minetest",
+        help="Path to minetest directory.",
+    )
+    parser.add_argument(
         "--max-steps", type=int, default=1e6, help="Maximum number of episode steps."
     )
     parser.add_argument("--show", action="store_true", help="Render the environment.")
 
     args = parser.parse_args()
 
-    main(args.model, args.weights, args.video_dir, args.max_steps, args.show)
+    main(args.model, args.weights, args.video_dir, args.minetest_dir, args.max_steps, args.show)
