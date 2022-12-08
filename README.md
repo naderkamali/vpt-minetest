@@ -1,17 +1,17 @@
 # Minetest Gym Environment
 
-The gym env sends actions to the Minetest client and receives back image observations.
+The gym env sends actions to the Minetest client and receives back  observations.
 Can only be used with [EleutherAI's minetest fork](https://github.com/EleutherAI/minetest).
 
 # Installation
 
 - Clone this repository
+- Create new virtual/conda environment with `python=3.8` and install dependencies: `pip install -r requirements.txt`
 - Clone https://github.com/EleutherAI/minetest to `MINETEST_DIR` and switch to the `develop` branch.
-- Build minetest
+- Build Minetest ([instructions](https://github.com/EleutherAI/minetest#compiling))
 
 You can check your setup by running
-- set `minetest_dir=MINETEST_DIR` in `run_random_agent.py`
-- `python run_random_agent.py`
+- `python run_random_agent.py --minetest_dir MINETEST_DIR`
 
 # Run VPT agents
 
