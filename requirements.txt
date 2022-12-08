@@ -5,3 +5,4 @@ attrs
 opencv-python
 matplotlib
 pyzmq
+protobuf

@@ -8,6 +8,7 @@ import numpy as np
 import zmq
 from gym.spaces import Box, Dict, Discrete
 from proto_python.client import dumb_inputs_pb2 as dumb_inputs
+from proto_python.client import dumb_outputs_pb2 as dumb_outputs
 
 # TODO read from the minetest.conf file
 DISPLAY_SIZE = (1024, 600)
@@ -104,7 +105,6 @@ def start_minetest_client(
         "--client-address",
         "tcp://localhost:" + str(client_port),
         "--record",
-        "--record-port",  # TODO remove the requirement for this
         "1234",
         "--noresizing",
     ]
@@ -180,9 +180,11 @@ class Minetest(gym.Env):
     def reset(self):
         print("Waiting for obs...")
         byte_obs = self.socket.recv()
-        obs = np.frombuffer(byte_obs, dtype=np.uint8).reshape(
-            DISPLAY_SIZE[1],
-            DISPLAY_SIZE[0],
+        pb_obs = dumb_outputs.OutputObservation()
+        pb_obs.ParseFromString(byte_obs)
+        obs = np.frombuffer(pb_obs.data, dtype=np.uint8).reshape(
+            pb_obs.height,
+            pb_obs.width,
             3,
         )
         self.last_obs = obs
@@ -206,10 +208,12 @@ class Minetest(gym.Env):
         print("Sending action: {}".format(action))
         self.socket.send(pb_action.SerializeToString())
         print("Waiting for obs...")
-        byte_next_obs = self.socket.recv()
-        next_obs = np.frombuffer(byte_next_obs, dtype=np.uint8).reshape(
-            DISPLAY_SIZE[1],
-            DISPLAY_SIZE[0],
+        byte_obs = self.socket.recv()
+        pb_obs = dumb_outputs.OutputObservation()
+        pb_obs.ParseFromString(byte_obs)
+        next_obs = np.frombuffer(pb_obs.data, dtype=np.uint8).reshape(
+            pb_obs.height,
+            pb_obs.width,
             3,
         )
         self.last_obs = next_obs
