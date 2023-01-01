@@ -1,4 +1,5 @@
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 import torch as th
 from gym import spaces
@@ -102,7 +103,7 @@ def resize_image(img, target_resolution):
 
 
 class MineRLAgent:
-    def __init__(self, env, device=None, policy_kwargs=None, pi_head_kwargs=None):
+    def __init__(self, env, device=None, policy_kwargs=None, pi_head_kwargs=None, show_agent_perspective=True):
         # validate_env(env)
 
         if device is None:
@@ -127,6 +128,10 @@ class MineRLAgent:
         self.hidden_state = self.policy.initial_state(1)
         self._dummy_first = th.from_numpy(np.array((False,))).to(device)
 
+        self.show_agent_perspective = show_agent_perspective
+        self.figure = plt.figure(num="VPT agent perspective")
+        self.render_img = None
+
     def load_weights(self, path):
         """Load model weights from a path, and reset hidden state"""
         self.policy.load_state_dict(th.load(path, map_location=self.device), strict=False)
@@ -143,6 +148,14 @@ class MineRLAgent:
         Returns torch tensors.
         """
         agent_input = resize_image(minerl_obs["pov"], AGENT_RESOLUTION)[None]
+        if self.show_agent_perspective:
+            if self.render_img is None:
+                self.render_img = self.figure.gca().imshow(agent_input[0])
+                self.figure.gca().axis("off")
+            else:
+                self.render_img.set_data(agent_input[0])
+            plt.draw(), plt.pause(1e-3)
+
         agent_input = {"img": th.from_numpy(agent_input).to(self.device)}
         return agent_input
 
