@@ -11,9 +11,9 @@ Can only be used with [EleutherAI's minetest fork](https://github.com/EleutherAI
 - Build Minetest ([instructions](https://github.com/EleutherAI/minetest#compiling))
 
 You can check your setup by running
-- `python run_random_agent.py --minetest_dir MINETEST_DIR`
+- `python run_random_agent.py --minetest_path MINETEST_DIR/bin/minetest`
 
 # Run VPT agents
 
 - Download VPT model and weights file from https://github.com/openai/Video-Pre-Training#agent-model-zoo
-- `python run_vpt_agent.py --model MODEL_FILE --weights WEIGHTS_FILE --minetest_dir MINETEST_DIR`
+- `python run_vpt_agent.py --model MODEL_FILE --weights WEIGHTS_FILE --minetest_path MINETEST_DIR/bin/minetest`
