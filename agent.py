@@ -53,7 +53,6 @@ ENV_KWARGS = dict(
 )
 
 TARGET_ACTION_SPACE = {
-    "ESC": spaces.Discrete(2),
     "attack": spaces.Discrete(2),
     "back": spaces.Discrete(2),
     "camera": spaces.Box(low=-180.0, high=180.0, shape=(2,)),

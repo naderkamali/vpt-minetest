@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from gym.wrappers import TimeLimit
-from minetest_env import Minetest
+from minetester import Minetest
 
 
 def main(minetest_path, max_steps, show, seed):

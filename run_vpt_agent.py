@@ -3,10 +3,9 @@ from argparse import ArgumentParser
 
 from agent import MineRLAgent
 from gym.wrappers import Monitor, TimeLimit
-from minetest_env import Minetest
+from minetester import Minetest
 
 MINERL_TO_MINETEST_ACTIONS = {
-    "ESC": "ESC",  # no VPT action
     "attack": "DIG",
     "back": "BACKWARD",
     "camera": "MOUSE",
@@ -43,22 +42,27 @@ def minerl_to_minetest_action(minerl_action, minetest_env):
                 # TODO this translation of the camera action maybe wrong
                 camera_action = minerl_action[minerl_key][0]
                 mouse_action = [0, 0]
-                mouse_action[0] = round(
-                    0.5
-                    * minetest_env.display_size[0]
-                    * camera_action[0]
-                    / minetest_env.fov_x,
-                )
-                mouse_action[1] = round(
-                    0.5
-                    * minetest_env.display_size[1]
-                    * camera_action[1]
-                    / minetest_env.fov_y,
-                )
+                minerl_res = (640, 360)
+                mouse_action[0] = round((camera_action[0] / minerl_res[0]) 
+                                        * minetest_env.display_size[0])
+                mouse_action[1] = round((camera_action[1] / minerl_res[1]) 
+                                        * minetest_env.display_size[1])
+                #mouse_action[0] = round(
+                #    0.5
+                #    * minetest_env.display_size[0]
+                #    * camera_action[0]
+                #    / minetest_env.fov_x,
+                #)
+                #mouse_action[1] = round(
+                #    0.5
+                #    * minetest_env.display_size[1]
+                #    * camera_action[1]
+                #    / minetest_env.fov_y,
+                #)
                 print(f"Camera action {camera_action}, mouse action {mouse_action}")
                 minetest_action[minetest_key] = mouse_action
     minetest_action["HOTBAR_NEXT"] = minetest_action["HOTBAR_PREV"] = 0
-    minetest_action["ESC"] = minetest_action["MIDDLE"] = 0
+    minetest_action["MIDDLE"] = 0
     return minetest_action
 
 
@@ -67,14 +71,14 @@ def minetest_to_minerl_obs(minetest_obs):
 
 
 def main(
-    model, weights, video_dir, minetest_path, max_steps, show, seed, show_agent_pov
+    model, weights, video_dir, minetest_path, max_steps, show, seed, show_agent_pov,
 ):
     env = Minetest(minetest_executable=minetest_path, seed=seed)
     env = TimeLimit(env, max_episode_steps=max_steps)
     env.metadata["render.modes"] = ["rgb_array", "ansi"]
     env.metadata["video.frames_per_second"] = 20
     env = Monitor(
-        env, video_dir, video_callable=lambda _: True, force=False, resume=True
+        env, video_dir, video_callable=lambda _: True, force=False, resume=True,
     )
     print("---Loading model---")
     agent_parameters = pickle.load(open(model, "rb"))
@@ -130,12 +134,12 @@ if __name__ == "__main__":
         help="Path to minetest executable.",
     )
     parser.add_argument(
-        "--max-steps", type=int, default=1e6, help="Maximum number of episode steps."
+        "--max-steps", type=int, default=1e6, help="Maximum number of episode steps.",
     )
     parser.add_argument("--show", action="store_true", help="Render the environment.")
     parser.add_argument("--seed", type=int, default=0, help="Seed of the environment.")
     parser.add_argument(
-        "--show-agent-pov", action="store_true", help="Show agent's point of view."
+        "--show-agent-pov", action="store_true", help="Show agent's point of view.",
     )
 
     args = parser.parse_args()
