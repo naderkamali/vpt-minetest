@@ -2,7 +2,8 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import torch as th
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 from gym3.types import DictType
 from lib.action_mapping import CameraHierarchicalMapping
 from lib.actions import ActionTransformer

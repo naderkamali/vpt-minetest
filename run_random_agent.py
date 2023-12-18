@@ -1,18 +1,18 @@
 from argparse import ArgumentParser
-
-from gym.wrappers import TimeLimit
+import gymnasium as gym
+from gymnasium.wrappers import TimeLimit
 from minetester import Minetest
 
 
 def main(minetest_path, max_steps, show, seed):
-    env = Minetest(minetest_executable=minetest_path, seed=seed)
+    env = Minetest(minetest_root=minetest_path, base_seed=seed)
     env = TimeLimit(env, max_episode_steps=max_steps)
 
     obs = env.reset()
     done = False
     while not done:
         action = env.action_space.sample()
-        obs, rew, done, info = env.step(action)
+        obs, rew, done, _, info = env.step(action)
         if show:
             env.render()
     env.close()

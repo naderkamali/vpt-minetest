@@ -1,8 +1,8 @@
 import pickle
 from argparse import ArgumentParser
-
+import gymnasium as gym
 from agent import MineRLAgent
-from gym.wrappers import Monitor, TimeLimit
+from gymnasium.wrappers import RecordVideo, TimeLimit
 from minetester import Minetest
 
 MINERL_TO_MINETEST_ACTIONS = {
@@ -73,13 +73,14 @@ def minetest_to_minerl_obs(minetest_obs):
 def main(
     model, weights, video_dir, minetest_path, max_steps, show, seed, show_agent_pov,
 ):
-    env = Minetest(minetest_executable=minetest_path, seed=seed)
+    env = Minetest(minetest_root=minetest_path, base_seed=seed, render_mode="rgb_array")
     env = TimeLimit(env, max_episode_steps=max_steps)
     env.metadata["render.modes"] = ["rgb_array", "ansi"]
     env.metadata["video.frames_per_second"] = 20
-    env = Monitor(
-        env, video_dir, video_callable=lambda _: True, force=False, resume=True,
-    )
+#    env = Monitor(
+#        env, video_dir, video_callable=lambda _: True, force=False, resume=True,
+#    )
+    env = RecordVideo(env, video_dir, episode_trigger=lambda episode_number: True)
     print("---Loading model---")
     agent_parameters = pickle.load(open(model, "rb"))
     policy_kwargs = agent_parameters["model"]["args"]["net"]["args"]

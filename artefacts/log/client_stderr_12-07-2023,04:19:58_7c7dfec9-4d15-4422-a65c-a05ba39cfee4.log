@@ -1,0 +1,12 @@
+ATTENTION: default value of option vblank_mode overridden by environment.
+2023-12-07 04:20:01: WARNING[Main]: [Client] m_server_ser_ser not set yet
+2023-12-07 04:20:01: WARNING[Main]: [Client] m_server_ser_ser not set yet
+2023-12-07 04:20:01: WARNING[Main]: Client::ReceiveAll(): Packet processing budget exceeded.
+2023-12-07 04:20:02: WARNING[Main]: Try to connect to agent address: tcp://localhost:5555
+2023-12-07 04:20:02: WARNING[Main]: Client::ReceiveAll(): Packet processing budget exceeded.
+2023-12-07 04:20:02: WARNING[Main]: [Client] Reading out INFO = | 2023-12-07 04:20:02.339330251
+2023-12-07 04:20:02: WARNING[Main]: [Client] Reading out REWARD = 0.000000| 2023-12-07 04:20:02.339617573
+2023-12-07 04:20:02: WARNING[Main]: [Client] Reading out INFO = | 2023-12-07 04:20:02.404798986
+2023-12-07 04:20:02: WARNING[Main]: [Client] Reading out REWARD = 0.000000| 2023-12-07 04:20:02.404953367
+AL lib: (EE) ALCpulsePlayback_contextStateCallback: Received context failure!
+AL lib: (EE) ALCpulsePlayback_streamStateCallback: Received stream failure!

@@ -1,5 +1,5 @@
 torch==1.9.0
-gym==0.19
+gymnasium
 gym3
 attrs
 opencv-python
