@@ -1,3 +1,0 @@
-ATTENTION: default value of option vblank_mode overridden by environment.
-2023-12-07 04:22:00: WARNING[Main]: [Client] m_server_ser_ser not set yet
-2023-12-07 04:22:00: ERROR[Main]: Access denied. Reason: Another client is connected with this name.  If your client closed unexpectedly, try again in a minute.
